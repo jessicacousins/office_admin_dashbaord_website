@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office Admin Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Light Mode */
+            --primary-blue: #2563eb;
+            --secondary-blue: #3b82f6;
+            --light-blue: #dbeafe;
+            --primary-green: #059669;
+            --secondary-green: #10b981;
+            --light-green: #d1fae5;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --card-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            /* Dark Mode */
+            --primary-blue: #3b82f6;
+            --secondary-blue: #60a5fa;
+            --light-blue: #1e3a8a;
+            --primary-green: #10b981;
+            --secondary-green: #34d399;
+            --light-green: #064e3b;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --border: #475569;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --card-bg: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-green) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .icon-blue {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+        }
+
+        .icon-green {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+        }
+
+        .tool-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 0.5rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+        }
+
+        .btn-green:hover {
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+
+        .result-area {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            min-height: 100px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            background: var(--bg-tertiary);
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--primary-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-item.completed {
+            opacity: 0.6;
+            border-left-color: var(--primary-green);
+            text-decoration: line-through;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .task-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .task-btn:hover {
+            background: var(--border);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-card {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .email-template {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span>📋</span>
+                Office Admin Portal
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span id="theme-icon">🌙</span> Toggle Theme
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-grid">
+            <!-- Task Manager -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon icon-blue">✓</div>
+                    <div class="tool-title">Task Manager</div>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="taskInput" class="input-field" placeholder="Enter new task...">
+                </div>
+                <button class="btn" onclick="addTask()">Add Task</button>
+                <ul id="taskList" class="task-list"></ul>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalTasks">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="completedTasks">0</div>
+                        <div class="stat-label">Done</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Template Generator -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon icon-green">📧</div>
+                    <div class="tool-title">Email Templates</div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Template Type</label>
+                    <select id="emailType" class="input-field">
+                        <option value="meeting">Meeting Request</option>
+                        <option value="followup">Follow-up</option>
+                        <option value="reminder">Reminder</option>
+                        <option value="announcement">Announcement</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Recipient Name</label>
+                    <input type="text" id="recipientName" class="input-field" placeholder="John Doe">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Details</label>
+                    <input type="text" id="emailDetails" class="input-field" placeholder="Meeting topic, date, etc.">
+                </div>
+                <button class="btn btn-green" onclick="generateEmail()">Generate Template</button>
+                <div id="emailResult" class="email-template hidden"></div>
+            </div>
+
+            <!-- Password Generator -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon icon-blue">🔐</div>
+                    <div class="tool-title">Password Generator</div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Length: <span id="lengthValue">12</span></label>
+                    <input type="range" id="passwordLength" min="8" max="32" value="12" class="input-field" oninput="updateLength()">
+                </div>
+                <div class="input-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="includeSymbols" checked> Include Symbols
+                    </label>
+                </div>
+                <button class="btn" onclick="generatePassword()">Generate Password</button>
+                <div id="passwordResult" class="result-area"></div>
+            </div>
+
+            <!-- Text Formatter -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon icon-green">📝</div>
+                    <div class="tool-title">Text Formatter</div>
+                </div>
+                <div class="input-group">
+                    <textarea id="textInput" class="input-field" rows="4" placeholder="Paste your text here..."></textarea>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;">
+                    <button class="btn" onclick="formatText('upper')">UPPERCASE</button>
+                    <button class="btn" onclick="formatText('lower')">lowercase</button>
+                    <button class="btn" onclick="formatText('title')">Title Case</button>
+                    <button class="btn" onclick="formatText('sentence')">Sentence case</button>
+                </div>
+                <div id="textResult" class="result-area"></div>
+            </div>
+
+            <!-- Meeting Time Converter -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon icon-blue">🌍</div>
+                    <div class="tool-title">Time Zone Converter</div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Meeting Time</label>
+                    <input type="datetime-local" id="meetingTime" class="input-field">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">From Time Zone</label>
+                    <select id="fromTimezone" class="input-field">
+                        <option value="America/New_York">Eastern Time (ET)</option>
+                        <option value="America/Chicago">Central Time (CT)</option>
+                        <option value="America/Denver">Mountain Time (MT)</option>
+                        <option value="America/Los_Angeles">Pacific Time (PT)</option>
+                        <option value="UTC">UTC</option>
+                        <option value="Europe/London">London (GMT)</option>
+                    </select>
+                </div>
+                <button class="btn btn-green" onclick="convertTimezone()">Convert Time</button>
+                <div id="timezoneResult" class="result-area"></div>
+            </div>
+
+            <!-- Character & Word Counter -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon icon-green">📊</div>
+                    <div class="tool-title">Text Counter</div>
+                </div>
+                <div class="input-group">
+                    <textarea id="countText" class="input-field" rows="5" placeholder="Type or paste text to count..." oninput="updateCounts()"></textarea>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="charCount">0</div>
+                        <div class="stat-label">Characters</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="wordCount">0</div>
+                        <div class="stat-label">Words</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="lineCount">0</div>
+                        <div class="stat-label">Lines</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meeting Room Scheduler -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon icon-blue">🏢</div>
+                    <div class="tool-title">Room Scheduler</div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Room</label>
+                    <select id="roomSelect" class="input-field">
+                        <option value="Conference A">Conference Room A</option>
+                        <option value="Conference B">Conference Room B</option>
+                        <option value="Board Room">Board Room</option>
+                        <option value="Training Room">Training Room</option>
+                        <option value="Break Room">Break Room</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Date & Time</label>
+                    <input type="datetime-local" id="bookingTime" class="input-field">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Duration (hours)</label>
+                    <input type="number" id="duration" class="input-field" value="1" min="0.5" max="8" step="0.5">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Purpose</label>
+                    <input type="text" id="meetingPurpose" class="input-field" placeholder="Team meeting, client call, etc.">
+                </div>
+                <button class="btn" onclick="bookRoom()">Book Room</button>
+                <div id="roomBookings" class="result-area"></div>
+            </div>
+
+            <!-- Contact Directory -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon icon-green">👥</div>
+                    <div class="tool-title">Contact Directory</div>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="searchContacts" class="input-field" placeholder="Search contacts..." oninput="searchContacts()">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;">
+                    <input type="text" id="contactName" class="input-field" placeholder="Name">
+                    <input type="text" id="contactTitle" class="input-field" placeholder="Title">
+                    <input type="email" id="contactEmail" class="input-field" placeholder="Email">
+                    <input type="tel" id="contactPhone" class="input-field" placeholder="Phone">
+                </div>
+                <button class="btn btn-green" onclick="addContact()">Add Contact</button>
+                <div id="contactList" class="result-area" style="max-height: 200px; overflow-y: auto;"></div>
+            </div>
+
+            <!-- Expense Calculator -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon icon-blue">💰</div>
+                    <div class="tool-title">Expense Calculator</div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Expense Type</label>
+                    <select id="expenseType" class="input-field">
+                        <option value="Office Supplies">Office Supplies</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Meals">Meals & Entertainment</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.5rem;">
+                    <input type="text" id="expenseDescription" class="input-field" placeholder="Description">
+                    <input type="number" id="expenseAmount" class="input-field" placeholder="$0.00" step="0.01" min="0">
+                </div>
+                <button class="btn" onclick="addExpense()" style="margin-top: 1rem;">Add Expense</button>
+                <div id="expenseList" style="margin-top: 1rem; max-height: 150px; overflow-y: auto;"></div>
+                <div class="stats-grid" style="margin-top: 1rem;">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalExpenses">$0.00</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="expenseCount">0</div>
+                        <div class="stat-label">Items</div>
+                    </div>
+                </div>
+                <button class="btn btn-green" onclick="exportExpenses()" style="margin-top: 1rem;">Export Report</button>
+            </div>
+
+            <!-- Document Templates -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon icon-green">📄</div>
+                    <div class="tool-title">Document Templates</div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Template Type</label>
+                    <select id="docType" class="input-field">
+                        <option value="memo">Company Memo</option>
+                        <option value="agenda">Meeting Agenda</option>
+                        <option value="minutes">Meeting Minutes</option>
+                        <option value="policy">Policy Document</option>
+                        <option value="invoice">Invoice</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Title/Subject</label>
+                    <input type="text" id="docTitle" class="input-field" placeholder="Document title">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Date</label>
+                    <input type="date" id="docDate" class="input-field">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Additional Details</label>
+                    <textarea id="docDetails" class="input-field" rows="2" placeholder="Key points, attendees, etc."></textarea>
+                </div>
+                <button class="btn btn-green" onclick="generateDocument()">Generate Template</button>
+                <div id="docResult" class="result-area hidden" style="max-height: 300px; overflow-y: auto; white-space: pre-wrap;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Management
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        window.addEventListener('load', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                document.getElementById('theme-icon').textContent = '☀️';
+            }
+            loadTasks();
+            displayBookings();
+            displayContacts(contacts);
+            displayExpenses();
+        });
+
+        // Task Manager
+        let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const text = input.value.trim();
+            
+            if (text) {
+                const task = {
+                    id: Date.now(),
+                    text: text,
+                    completed: false,
+                    created: new Date().toLocaleDateString()
+                };
+                tasks.unshift(task);
+                input.value = '';
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(task => task.id !== id);
+            saveTasks();
+            renderTasks();
+        }
+
+        function toggleTask(id) {
+            const task = tasks.find(task => task.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        function renderTasks() {
+            const list = document.getElementById('taskList');
+            list.innerHTML = '';
+            
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.className = `task-item ${task.completed ? 'completed' : ''}`;
+                li.innerHTML = `
+                    <span>${task.text}</span>
+                    <div class="task-actions">
+                        <button class="task-btn" onclick="toggleTask(${task.id})" title="${task.completed ? 'Mark incomplete' : 'Mark complete'}">
+                            ${task.completed ? '↶' : '✓'}
+                        </button>
+                        <button class="task-btn" onclick="deleteTask(${task.id})" title="Delete task">✕</button>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+
+            updateTaskStats();
+        }
+
+        function updateTaskStats() {
+            const total = tasks.length;
+            const completed = tasks.filter(task => task.completed).length;
+            
+            document.getElementById('totalTasks').textContent = total;
+            document.getElementById('completedTasks').textContent = completed;
+        }
+
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        function loadTasks() {
+            renderTasks();
+        }
+
+        // Email Templates
+        function generateEmail() {
+            const type = document.getElementById('emailType').value;
+            const recipient = document.getElementById('recipientName').value || 'Recipient';
+            const details = document.getElementById('emailDetails').value || 'details';
+            const result = document.getElementById('emailResult');
+
+            let template = '';
+
+            switch(type) {
+                case 'meeting':
+                    template = `
+<strong>Subject:</strong> Meeting Request - ${details}
+
+Dear ${recipient},
+
+I hope this email finds you well. I would like to schedule a meeting to discuss ${details}.
+
+<strong>Meeting Details:</strong>
+• Topic: ${details}
+• Duration: 30 minutes
+• Format: In-person/Video call (please confirm your preference)
+
+Please let me know your availability for the coming week, and I'll send a calendar invitation accordingly.
+
+Best regards,
+[Your Name]`;
+                    break;
+                case 'followup':
+                    template = `
+<strong>Subject:</strong> Follow-up: ${details}
+
+Dear ${recipient},
+
+I wanted to follow up on our previous discussion regarding ${details}.
+
+As discussed, I wanted to ensure we stay on track with our timeline and address any questions you might have.
+
+Please let me know if you need any additional information or clarification.
+
+Looking forward to your response.
+
+Best regards,
+[Your Name]`;
+                    break;
+                case 'reminder':
+                    template = `
+<strong>Subject:</strong> Reminder: ${details}
+
+Dear ${recipient},
+
+This is a friendly reminder about ${details}.
+
+<strong>Important Details:</strong>
+• Date: [Insert Date]
+• Time: [Insert Time]
+• Location/Link: [Insert Details]
+
+Please confirm your attendance at your earliest convenience.
+
+Thank you for your attention to this matter.
+
+Best regards,
+[Your Name]`;
+                    break;
+                case 'announcement':
+                    template = `
+<strong>Subject:</strong> Important Announcement: ${details}
+
+Dear ${recipient},
+
+I hope this message finds you well. I am writing to inform you about ${details}.
+
+<strong>Key Information:</strong>
+• Effective Date: [Insert Date]
+• What This Means: [Insert Impact]
+• Next Steps: [Insert Actions Required]
+
+If you have any questions or concerns, please don't hesitate to reach out to me directly.
+
+Thank you for your attention.
+
+Best regards,
+[Your Name]`;
+                    break;
+            }
+
+            result.innerHTML = template;
+            result.classList.remove('hidden');
+            result.classList.add('fade-in');
+        }
+
+        // Password Generator
+        function updateLength() {
+            const length = document.getElementById('passwordLength').value;
+            document.getElementById('lengthValue').textContent = length;
+        }
+
+        function generatePassword() {
+            const length = parseInt(document.getElementById('passwordLength').value);
+            const includeSymbols = document.getElementById('includeSymbols').checked;
+            
+            const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+            const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numbers = '0123456789';
+            const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            
+            let chars = lowercase + uppercase + numbers;
+            if (includeSymbols) {
+                chars += symbols;
+            }
+            
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            document.getElementById('passwordResult').textContent = password;
+        }
+
+        // Text Formatter
+        function formatText(type) {
+            const input = document.getElementById('textInput').value;
+            const result = document.getElementById('textResult');
+            
+            let formatted = '';
+            
+            switch(type) {
+                case 'upper':
+                    formatted = input.toUpperCase();
+                    break;
+                case 'lower':
+                    formatted = input.toLowerCase();
+                    break;
+                case 'title':
+                    formatted = input.toLowerCase().replace(/\w\S*/g, (txt) => 
+                        txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+                    );
+                    break;
+                case 'sentence':
+                    formatted = input.toLowerCase().replace(/(^\w{1}|\.\s*\w{1})/gi, (letter) => 
+                        letter.toUpperCase()
+                    );
+                    break;
+            }
+            
+            result.textContent = formatted;
+        }
+
+        // Time Zone Converter
+        function convertTimezone() {
+            const meetingTime = document.getElementById('meetingTime').value;
+            const fromTZ = document.getElementById('fromTimezone').value;
+            const result = document.getElementById('timezoneResult');
+            
+            if (!meetingTime) {
+                result.textContent = 'Please select a meeting time.';
+                return;
+            }
+            
+            const date = new Date(meetingTime);
+            const timezones = [
+                'America/New_York',
+                'America/Chicago', 
+                'America/Denver',
+                'America/Los_Angeles',
+                'UTC',
+                'Europe/London',
+                'Europe/Paris',
+                'Asia/Tokyo'
+            ];
+            
+            let output = `Meeting Time Conversions:\n\n`;
+            
+            timezones.forEach(tz => {
+                try {
+                    const converted = new Intl.DateTimeFormat('en-US', {
+                        timeZone: tz,
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        timeZoneName: 'short'
+                    }).format(date);
+                    
+                    const tzName = tz.split('/')[1]?.replace('_', ' ') || tz;
+                    output += `${tzName}: ${converted}\n`;
+                } catch (e) {
+                    console.error('Error converting timezone:', e);
+                }
+            });
+            
+            result.textContent = output;
+        }
+
+        // Text Counter
+        function updateCounts() {
+            const text = document.getElementById('countText').value;
+            
+            const charCount = text.length;
+            const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+            const lineCount = text.split('\n').length;
+            
+            document.getElementById('charCount').textContent = charCount;
+            document.getElementById('wordCount').textContent = wordCount;
+            document.getElementById('lineCount').textContent = lineCount;
+        }
+
+        // Meeting Room Scheduler
+        let roomBookings = JSON.parse(localStorage.getItem('roomBookings') || '[]');
+
+        function bookRoom() {
+            const room = document.getElementById('roomSelect').value;
+            const time = document.getElementById('bookingTime').value;
+            const duration = parseFloat(document.getElementById('duration').value);
+            const purpose = document.getElementById('meetingPurpose').value || 'Meeting';
+
+            if (!time) {
+                alert('Please select a date and time.');
+                return;
+            }
+
+            const startTime = new Date(time);
+            const endTime = new Date(startTime.getTime() + (duration * 60 * 60 * 1000));
+
+            const booking = {
+                id: Date.now(),
+                room: room,
+                start: startTime,
+                end: endTime,
+                duration: duration,
+                purpose: purpose,
+                created: new Date().toLocaleDateString()
+            };
+
+            roomBookings.push(booking);
+            roomBookings.sort((a, b) => new Date(a.start) - new Date(b.start));
+            
+            localStorage.setItem('roomBookings', JSON.stringify(roomBookings));
+            displayBookings();
+
+            // Clear form
+            document.getElementById('bookingTime').value = '';
+            document.getElementById('duration').value = '1';
+            document.getElementById('meetingPurpose').value = '';
+        }
+
+        function displayBookings() {
+            const result = document.getElementById('roomBookings');
+            const today = new Date();
+            const upcoming = roomBookings.filter(booking => new Date(booking.start) >= today);
+
+            if (upcoming.length === 0) {
+                result.textContent = 'No upcoming bookings.';
+                return;
+            }
+
+            let output = 'Upcoming Bookings:\n\n';
+            upcoming.forEach(booking => {
+                const start = new Date(booking.start);
+                const end = new Date(booking.end);
+                output += `${booking.room}\n`;
+                output += `${start.toLocaleDateString()} ${start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - ${end.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}\n`;
+                output += `Purpose: ${booking.purpose}\n\n`;
+            });
+
+            result.textContent = output;
+        }
+
+        // Contact Directory
+        let contacts = JSON.parse(localStorage.getItem('contacts') || '[]');
+
+        function addContact() {
+            const name = document.getElementById('contactName').value.trim();
+            const title = document.getElementById('contactTitle').value.trim();
+            const email = document.getElementById('contactEmail').value.trim();
+            const phone = document.getElementById('contactPhone').value.trim();
+
+            if (!name || !email) {
+                alert('Name and email are required.');
+                return;
+            }
+
+            const contact = {
+                id: Date.now(),
+                name: name,
+                title: title,
+                email: email,
+                phone: phone,
+                created: new Date().toLocaleDateString()
+            };
+
+            contacts.push(contact);
+            contacts.sort((a, b) => a.name.localeCompare(b.name));
+            
+            localStorage.setItem('contacts', JSON.stringify(contacts));
+            displayContacts(contacts);
+
+            // Clear form
+            document.getElementById('contactName').value = '';
+            document.getElementById('contactTitle').value = '';
+            document.getElementById('contactEmail').value = '';
+            document.getElementById('contactPhone').value = '';
+        }
+
+        function searchContacts() {
+            const query = document.getElementById('searchContacts').value.toLowerCase();
+            const filtered = contacts.filter(contact => 
+                contact.name.toLowerCase().includes(query) ||
+                contact.title.toLowerCase().includes(query) ||
+                contact.email.toLowerCase().includes(query)
+            );
+            displayContacts(filtered);
+        }
+
+        function displayContacts(contactList) {
+            const result = document.getElementById('contactList');
+            
+            if (contactList.length === 0) {
+                result.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 1rem;">No contacts found.</div>';
+                return;
+            }
+
+            let output = '';
+            contactList.forEach(contact => {
+                output += `<div style="border-bottom: 1px solid var(--border); padding: 0.75rem 0;">`;
+                output += `<div style="font-weight: 600; color: var(--primary-blue);">${contact.name}</div>`;
+                if (contact.title) output += `<div style="font-size: 0.9rem; color: var(--text-secondary);">${contact.title}</div>`;
+                output += `<div style="font-size: 0.9rem; margin-top: 0.25rem;">📧 ${contact.email}</div>`;
+                if (contact.phone) output += `<div style="font-size: 0.9rem;">📞 ${contact.phone}</div>`;
+                output += `</div>`;
+            });
+
+            result.innerHTML = output;
+        }
+
+        // Expense Calculator
+        let expenses = JSON.parse(localStorage.getItem('expenses') || '[]');
+
+        function addExpense() {
+            const type = document.getElementById('expenseType').value;
+            const description = document.getElementById('expenseDescription').value.trim();
+            const amount = parseFloat(document.getElementById('expenseAmount').value);
+
+            if (!description || !amount || amount <= 0) {
+                alert('Please enter a valid description and amount.');
+                return;
+            }
+
+            const expense = {
+                id: Date.now(),
+                type: type,
+                description: description,
+                amount: amount,
+                date: new Date().toLocaleDateString()
+            };
+
+            expenses.push(expense);
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+            displayExpenses();
+
+            // Clear form
+            document.getElementById('expenseDescription').value = '';
+            document.getElementById('expenseAmount').value = '';
+        }
+
+        function displayExpenses() {
+            const list = document.getElementById('expenseList');
+            const totalEl = document.getElementById('totalExpenses');
+            const countEl = document.getElementById('expenseCount');
+
+            if (expenses.length === 0) {
+                list.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 1rem;">No expenses recorded.</div>';
+                totalEl.textContent = '$0.00';
+                countEl.textContent = '0';
+                return;
+            }
+
+            let output = '';
+            let total = 0;
+
+            expenses.slice(-10).reverse().forEach(expense => {
+                total += expense.amount;
+                output += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-bottom: 1px solid var(--border);">`;
+                output += `<div>`;
+                output += `<div style="font-weight: 500;">${expense.description}</div>`;
+                output += `<div style="font-size: 0.8rem; color: var(--text-secondary);">${expense.type} • ${expense.date}</div>`;
+                output += `</div>`;
+                output += `<div style="font-weight: 600; color: var(--primary-green);">${expense.amount.toFixed(2)}</div>`;
+                output += `</div>`;
+            });
+
+            const grandTotal = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+
+            list.innerHTML = output;
+            totalEl.textContent = `${grandTotal.toFixed(2)}`;
+            countEl.textContent = expenses.length;
+        }
+
+        function exportExpenses() {
+            if (expenses.length === 0) {
+                alert('No expenses to export.');
+                return;
+            }
+
+            let report = 'EXPENSE REPORT\n';
+            report += '=====================================\n';
+            report += `Generated: ${new Date().toLocaleDateString()}\n\n`;
+
+            const categories = {};
+            let total = 0;
+
+            expenses.forEach(expense => {
+                if (!categories[expense.type]) {
+                    categories[expense.type] = [];
+                }
+                categories[expense.type].push(expense);
+                total += expense.amount;
+            });
+
+            for (const [category, items] of Object.entries(categories)) {
+                const categoryTotal = items.reduce((sum, item) => sum + item.amount, 0);
+                report += `${category.toUpperCase()} (${categoryTotal.toFixed(2)})\n`;
+                report += '-------------------------------------\n';
+                
+                items.forEach(item => {
+                    report += `${item.date} | ${item.description} | ${item.amount.toFixed(2)}\n`;
+                });
+                report += '\n';
+            }
+
+            report += `TOTAL EXPENSES: ${total.toFixed(2)}\n`;
+
+            // Create and download file
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `expense-report-${new Date().toLocaleDateString().replace(/\//g, '-')}.txt`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Document Templates
+        function generateDocument() {
+            const type = document.getElementById('docType').value;
+            const title = document.getElementById('docTitle').value || 'Document Title';
+            const date = document.getElementById('docDate').value || new Date().toLocaleDateString();
+            const details = document.getElementById('docDetails').value || '';
+            const result = document.getElementById('docResult');
+
+            let template = '';
+            const formattedDate = new Date(date).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+
+            switch(type) {
+                case 'memo':
+                    template = `MEMORANDUM
+
+TO:      All Staff
+FROM:    [Your Name]
+DATE:    ${formattedDate}
+RE:      ${title}
+
+${details || 'This memo serves to inform all staff about [subject]. Please review the information below and direct any questions to the appropriate department.'}
+
+Key Points:
+• [Point 1]
+• [Point 2]
+• [Point 3]
+
+Effective Date: ${formattedDate}
+
+If you have any questions regarding this memo, please contact [contact information].
+
+Best regards,
+[Your Name]
+[Your Title]`;
+                    break;
+                case 'agenda':
+                    template = `MEETING AGENDA
+
+Meeting: ${title}
+Date: ${formattedDate}
+Time: [Meeting Time]
+Location: [Meeting Location]
+
+ATTENDEES:
+• [Name 1] - [Title]
+• [Name 2] - [Title]
+• [Add additional attendees]
+
+AGENDA ITEMS:
+
+1. Call to Order & Welcome (5 min)
+   
+2. Review of Previous Meeting Minutes (10 min)
+   
+3. ${details || 'Main Discussion Topics'} (30 min)
+   • [Topic 1]
+   • [Topic 2]
+   
+4. Action Items Review (15 min)
+   
+5. New Business (15 min)
+   
+6. Next Steps & Closing (5 min)
+
+MATERIALS NEEDED:
+• [Document 1]
+• [Document 2]
+
+Prepared by: [Your Name]
+Contact: [Your Email/Phone]`;
+                    break;
+                case 'minutes':
+                    template = `MEETING MINUTES
+
+Meeting: ${title}
+Date: ${formattedDate}
+Time: [Start Time] - [End Time]
+Location: [Meeting Location]
+Facilitator: [Facilitator Name]
+Minutes Taken By: [Your Name]
+
+ATTENDEES PRESENT:
+• [Name 1] - [Title]
+• [Name 2] - [Title]
+
+ATTENDEES ABSENT:
+• [Name] - [Title]
+
+AGENDA ITEMS DISCUSSED:
+
+1. [Topic 1]
+   Discussion: ${details || '[Summary of discussion]'}
+   Decision: [Decision made]
+   
+2. [Topic 2]
+   Discussion: [Summary of discussion]
+   Decision: [Decision made]
+
+ACTION ITEMS:
+• [Action Item 1] - Assigned to: [Name] - Due: [Date]
+• [Action Item 2] - Assigned to: [Name] - Due: [Date]
+
+NEXT MEETING:
+Date: [Date]
+Time: [Time]
+Location: [Location]
+
+Minutes prepared by: [Your Name]
+Date distributed: ${new Date().toLocaleDateString()}`;
+                    break;
+                case 'policy':
+                    template = `COMPANY POLICY
+
+POLICY TITLE: ${title}
+EFFECTIVE DATE: ${formattedDate}
+POLICY NUMBER: [Policy #]
+DEPARTMENT: [Department Name]
+
+PURPOSE:
+This policy establishes guidelines for ${details || '[policy subject]'} to ensure [purpose/objective].
+
+SCOPE:
+This policy applies to all employees, contractors, and visitors of [Company Name].
+
+POLICY STATEMENT:
+[Company Name] is committed to [policy statement].
+
+PROCEDURES:
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+
+RESPONSIBILITIES:
+• Employees: [Responsibilities]
+• Managers: [Responsibilities]
+• HR Department: [Responsibilities]
+
+VIOLATIONS:
+Failure to comply with this policy may result in disciplinary action up to and including termination.
+
+REVIEW:
+This policy will be reviewed annually and updated as necessary.
+
+APPROVAL:
+Approved by: [Name]
+Title: [Title]
+Date: ${formattedDate}
+
+For questions about this policy, contact [Contact Information].`;
+                    break;
+                case 'invoice':
+                    template = `INVOICE
+
+INVOICE #: INV-${Date.now().toString().slice(-6)}
+DATE: ${formattedDate}
+DUE DATE: [Due Date]
+
+BILL TO:
+[Client Name]
+[Address Line 1]
+[Address Line 2]
+[City, State ZIP]
+
+FROM:
+[Your Company Name]
+[Address Line 1]
+[Address Line 2]
+[City, State ZIP]
+[Phone] | [Email]
+
+DESCRIPTION OF SERVICES:
+${title}
+
+ITEMIZED CHARGES:
+Description                    Quantity    Rate        Total
+${details || '[Service Description]'}        [Qty]      $[Rate]     $[Total]
+[Additional line items...]
+
+                                           SUBTOTAL:    $[Amount]
+                                           TAX (if applicable):    $[Tax]
+                                           TOTAL DUE:   $[Total]
+
+PAYMENT TERMS:
+Net 30 days
+
+PAYMENT METHODS:
+[Payment instructions]
+
+Thank you for your business!
+
+Questions? Contact us at [contact information]`;
+                    break;
+            }
+
+            result.textContent = template;
+            result.classList.remove('hidden');
+            result.classList.add('fade-in');
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'Enter':
+                        if (document.activeElement.id === 'taskInput') {
+                            e.preventDefault();
+                            addTask();
+                        }
+                        break;
+                }
+            }
+        });
+
+        // Enter key for task input
+        document.getElementById('taskInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+    </script>
+</body>
+</html>
